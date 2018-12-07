@@ -15,6 +15,10 @@ public class Diamond extends MapElement {
         
     }
     
+    public String displayImage(){
+        return "Diamond.png";
+    }
+    
     public void setHasCrate(boolean crateStateChange){
         hasCrate = crateStateChange;
     }

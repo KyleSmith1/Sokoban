@@ -12,4 +12,8 @@ public class Wall extends MapElement {
     public void createElement() {
 
     }
+    
+    public String displayImage(){
+        return "Wall.png";
+    }
 }

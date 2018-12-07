@@ -17,4 +17,8 @@ public class Crate extends MoveableMapElement {
 
     }
     
+    public String displayImage(){
+        return "Crate.png";
+    }
+    
 }

@@ -13,4 +13,8 @@ public class Tile extends MapElement {
         
     }
     
+    public String displayImage(){
+        return "Floor.png";
+    }
+    
 }

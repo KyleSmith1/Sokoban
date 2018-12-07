@@ -16,5 +16,9 @@ public class WarehouseKeeper extends MoveableMapElement {
     public void createElement() {
 
     }
+    
+    public String displayImage(){
+        return "WarehouseKeeper.png";
+    }
 
 }
