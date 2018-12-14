@@ -3,18 +3,6 @@ package sokoban;
 /**
  * @author 14001835
  */
-public class Tile extends MapElement {
+public class Tile {
 
-    public Tile(){
-        
-    }
-    
-    public void createElement(){
-        
-    }
-    
-    public String displayImage(){
-        return "Floor.png";
-    }
-    
 }

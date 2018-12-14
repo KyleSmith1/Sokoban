@@ -1,4 +1,4 @@
-package sokoban;
+package Sokoban;
 
 /**
  * @author 14001835

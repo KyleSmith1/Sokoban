@@ -3,10 +3,6 @@ package sokoban;
 /**
  * @author 14001835
  */
-abstract class MoveableMapElement extends MapElement {
+public class MoveableMapElement {
 
-    private Coordinate position;
-    
-    abstract public void moveElement(Coordinate newCoord);
-    
 }
