@@ -9,18 +9,15 @@ import javafx.scene.image.ImageView;
 public class WarehouseKeeper extends MoveableMapElement {
 
     public WarehouseKeeper() {
-
+        this.elementType = "WarehouseKeeper";
     }
 
     public void createElement() {
-        /*
-        Image keeperImage = new Image("file:resources/SokobanImages/WarehouseKeeper.png");
-        ImageView im = new ImageView();
-        im.setImage(keeperImage);
 
-        im.setLayoutX(xCoord);
-        im.setLayoutY(yCoord);
-         */
+        Image elementImage = new Image("file:resources/SokobanImages/WarehouseKeeper.png");
+        ImageView im = new ImageView();
+        im.setImage(elementImage);
+        this.elementImageView = im;
     }
 
 }

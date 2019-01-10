@@ -9,19 +9,16 @@ import javafx.scene.image.ImageView;
 public class Crate extends MoveableMapElement {
 
     public Crate() {
-
+        this.elementType = "Crate";
     }
 
     public void createElement() {
 
-        /*
-        Image crateImage = new Image("file:resources/SokobanImages/Crate.png");
+        Image elementImage = new Image("file:resources/SokobanImages/Crate.png");
         ImageView im = new ImageView();
-        im.setImage(crateImage);
+        im.setImage(elementImage);
+        this.elementImageView = im;
 
-        im.setLayoutX(xCoord);
-        im.setLayoutY(yCoord);
-         */
     }
 
 }

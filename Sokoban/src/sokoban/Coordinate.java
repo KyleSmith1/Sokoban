@@ -16,21 +16,20 @@ public class Coordinate {
     public int getX() {
         return xCoord;
     }
-    
+
     //Returns the y co-ordinate
-    public int getY(){
+    public int getY() {
         return yCoord;
     }
-    
+
     //Set the value for the x co-ordinate
-    public void setX(int newX){
+    public void setX(int newX) {
         xCoord = newX;
     }
-    
+
     //Set the value for the y co-ordinate
-    public void setY(int newY){
+    public void setY(int newY) {
         yCoord = newY;
     }
-    
 
 }

@@ -1,14 +1,26 @@
 package sokoban;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
@@ -16,7 +28,7 @@ import javafx.stage.Stage;
  */
 public class Level {
 
-    private MapElement map[][] = new MapElement[24][15];
+    private MapElement map[][] = new MapElement[25][15];
     private int numberOfMoves;
     private WarehouseKeeper warehouseKeeper;
     private Crate crates[] = new Crate[10];
@@ -32,31 +44,26 @@ public class Level {
         FileReader reader = null;
         BufferedReader inputBuffer = null;
 
-        int lineLength = 0;
-
         try {
 
             reader = new FileReader(inputFile);
             inputBuffer = new BufferedReader(reader);
-            String inputLine = inputBuffer.readLine();
-            lineLength = inputLine.length();
-
-            reader = new FileReader(inputFile);
-            inputBuffer = new BufferedReader(reader);
             int input = inputBuffer.read();
-
             while (input != -1) {
+                //Create system where i = x and j = y and times that by 32 to get x and y co-ords for the display
 
+                //Get variable from other classes class.variable?
                 for (int i = 0; i < map.length; i++) {
                     for (int j = 0; j < map[i].length; j++) {
 
                         char c = (char) input;
-                        
                         //Tile
                         if (c == ' ') {
                             Tile newFloor = new Tile();
                             if (map[i][j] == null) {
                                 map[i][j] = newFloor;
+                                newFloor.createElement();
+                                newFloor.displayImage();
                                 break;
                             }
 
@@ -65,6 +72,8 @@ public class Level {
                             Wall newWall = new Wall();
                             if (map[i][j] == null) {
                                 map[i][j] = newWall;
+                                newWall.createElement();
+                                newWall.displayImage();
                                 break;
                             }
 
@@ -80,6 +89,8 @@ public class Level {
 
                             if (map[i][j] == null) {
                                 map[i][j] = newCrate;
+                                newCrate.createElement();
+                                newCrate.displayImage();
                                 break;
                             }
 
@@ -88,6 +99,8 @@ public class Level {
                             Diamond newDiamond = new Diamond();
                             if (map[i][j] == null) {
                                 map[i][j] = newDiamond;
+                                newDiamond.createElement();
+                                newDiamond.displayImage();
                                 break;
                             }
 
@@ -96,29 +109,22 @@ public class Level {
                             WarehouseKeeper newKeeper = new WarehouseKeeper();
                             if (map[i][j] == null) {
                                 map[i][j] = newKeeper;
+                                newKeeper.createElement();
+                                warehouseKeeper = newKeeper;
+                                warehouseKeeper.displayImage();
                                 break;
                             }
                         }
-                        /*
-                        if (map[i][j] != null) {
-                            String tileType = map[i][j].displayImage();
-                            Image image = new Image("file:resources/SokobanImages/" + tileType);
-                            ImageView im = new ImageView();
-                            im.setImage(image);
-
-                            gridPane.add(im, i, j);
-
-                        }
-                        */
 
                     }
+
                     input = inputBuffer.read();
                 }
 
             }
-
-            map[0][0].displayImage();
             
+            map[0][0].displayGame();
+
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         } catch (IOException ioe) {

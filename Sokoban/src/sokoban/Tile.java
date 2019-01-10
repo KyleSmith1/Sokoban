@@ -9,20 +9,17 @@ import javafx.scene.image.ImageView;
 public class Tile extends MapElement {
 
     public Tile() {
-        
+        this.elementType = "Floor";
     }
 
     public void createElement() {
 
-        
-        /*
-        Image floorImage = new Image("file:resources/SokobanImages/Floor.png");
+        Image elementImage = new Image("file:resources/SokobanImages/Floor.png");
         ImageView im = new ImageView();
-        im.setImage(floorImage);
+        im.setImage(elementImage);
+        im.setLayoutX(70);
+        this.elementImageView = im;
 
-        im.setLayoutX(xCoord);
-        im.setLayoutY(yCoord);
-         */
     }
 
 }

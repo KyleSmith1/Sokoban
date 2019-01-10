@@ -9,18 +9,15 @@ import javafx.scene.image.ImageView;
 public class Wall extends MapElement {
 
     public Wall() {
-
+        this.elementType = "Wall";
     }
 
     public void createElement() {
-        /*
-        Image wallImage = new Image("file:resources/SokobanImages/Wall.png");
-        ImageView im = new ImageView();
-        im.setImage(wallImage);
 
-        im.setLayoutX(xCoord);
-        im.setLayoutY(yCoord);
-        */
+        Image elementImage = new Image("file:resources/SokobanImages/Wall.png");
+        ImageView im = new ImageView();
+        im.setImage(elementImage);
+        this.elementImageView = im;
     }
 
 }

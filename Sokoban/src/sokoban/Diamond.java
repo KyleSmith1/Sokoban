@@ -11,18 +11,16 @@ public class Diamond extends MapElement {
     private Boolean hasCrate;
 
     public Diamond() {
-
+        this.elementType = "Diamond";
     }
 
     public void createElement() {
-        /*
-        Image diamondImage = new Image("file:resources/SokobanImages/Diamond.png");
-        ImageView im = new ImageView();
-        im.setImage(diamondImage);
 
-        im.setLayoutX(xCoord);
-        im.setLayoutY(yCoord);
-        */
+        Image elementImage = new Image("file:resources/SokobanImages/Diamond.png");
+        ImageView im = new ImageView();
+        im.setImage(elementImage);
+        this.elementImageView = im;
+
     }
 
     public void setHasCrate(boolean crateStateChange) {
