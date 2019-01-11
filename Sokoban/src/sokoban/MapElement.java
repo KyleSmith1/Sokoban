@@ -1,16 +1,9 @@
 package sokoban;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -30,6 +23,7 @@ abstract class MapElement {
     private int yCoord;
     public static AnchorPane anchorPane = new AnchorPane();
     public static GridPane gridPane = new GridPane();
+    public static HBox topBorder = new HBox();
 
     public MapElement() {
 
@@ -60,15 +54,10 @@ abstract class MapElement {
         Stage window = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setMinSize(800, 500);
-        HBox topBorder = new HBox();
 
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         topBorder.setPadding(new Insets(10, 10, 10, 10));
         topBorder.setAlignment(Pos.CENTER);
-
-        Label label = new Label("Level");
-        label.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
-        topBorder.getChildren().add(label);
 
         borderPane.setTop(topBorder);
         borderPane.setCenter(anchorPane);
@@ -84,7 +73,5 @@ abstract class MapElement {
         window.show();
 
     }
-
-    
 
 }

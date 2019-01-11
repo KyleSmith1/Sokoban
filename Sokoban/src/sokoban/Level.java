@@ -1,27 +1,14 @@
 package sokoban;
 
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 import static sokoban.MapElement.gridPane;
 
 /**
@@ -30,9 +17,10 @@ import static sokoban.MapElement.gridPane;
 public class Level {
 
     private MapElement map[][] = new MapElement[25][15];
-    private int numberOfMoves;
+    private int numberOfMoves = 0;
     private WarehouseKeeper warehouseKeeper;
     private Crate crates[] = new Crate[10];
+    private Diamond diamonds[][] = new Diamond[25][15];
 
     public Level() {
 
@@ -47,6 +35,15 @@ public class Level {
 
         FileReader reader2 = null;
         BufferedReader inputBuffer2 = null;
+        
+        Label levelLabel= new Label("Level " + levelNumber);
+        Label movesLabel = new Label("Number of Moves: " + numberOfMoves);
+        
+        movesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+        levelLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
+        movesLabel.setTranslateX(100);
+        MapElement.topBorder.getChildren().add(levelLabel);
+        MapElement.topBorder.getChildren().add(movesLabel);
 
         Button upButton = new Button("\u2191");
         Button downButton = new Button("\u2193");
@@ -103,6 +100,7 @@ public class Level {
                                 map[i][j] = newWall;
 
                                 newWall.displayImage(i, j);
+
                                 break;
                             }
 
@@ -128,7 +126,7 @@ public class Level {
                             Diamond newDiamond = new Diamond();
                             if (map[i][j] == null) {
                                 map[i][j] = newDiamond;
-
+                                diamonds[i][j] = newDiamond;
                                 newDiamond.displayImage(i, j);
                                 break;
                             }
@@ -136,46 +134,15 @@ public class Level {
                         } //Warehouse Keeper
                         else if (c == '@') {
                             WarehouseKeeper newKeeper = new WarehouseKeeper();
+                            warehouseKeeper = newKeeper;
                             if (map[i][j] == null) {
-                                map[i][j] = newKeeper;
+                                map[i][j] = warehouseKeeper;
 
-                                warehouseKeeper = newKeeper;
                                 warehouseKeeper.displayImage(i, j);
 
                                 break;
                             }
                         }
-
-                        upButton.setOnAction(value -> {
-                            System.out.println("UP!");
-                        });
-
-                        downButton.setOnAction(value -> {
-
-                            System.out.println("DOWN!");
-
-                        });
-
-                        leftButton.setOnAction(value -> {
-
-                            System.out.println("LEFT!");
-                        });
-
-                        rightButton.setOnAction(value -> {
-
-                            System.out.println("RIGHT!");
-
-                        });
-
-                        resetButton.setOnAction(value -> {
-                            
-
-                        });
-
-                        nextLevelButton.setOnAction(value -> {
-                            
-
-                        });
 
                     }
 
@@ -183,6 +150,162 @@ public class Level {
                 }
 
             }
+
+            upButton.setOnAction(value -> {
+
+                for (int i = 0; i < map.length - lineLengthModifier; i++) {
+                    for (int j = 0; j < map[i].length; j++) {
+                        if (map[i][j] == warehouseKeeper) {
+                            if (!(map[i][j - 1] instanceof Wall)) {
+                                if ((map[i][j - 1] instanceof Crate)) {
+                                    if (!(map[i][j - 2] instanceof Crate || map[i][j - 2] instanceof Wall)) {
+                                        Crate newCrate = new Crate();
+                                        map[i][j - 2] = newCrate;
+                                        newCrate.displayImage(i, j - 2);
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                if (diamonds[i][j] != null) {
+                                    Diamond newDiamond = new Diamond();
+                                    map[i][j] = newDiamond;
+                                    newDiamond.displayImage(i, j);
+                                } else {
+                                    Tile newFloor = new Tile();
+                                    map[i][j] = newFloor;
+                                    newFloor.displayImage(i, j);
+                                }
+                                map[i][j - 1] = warehouseKeeper;
+                                warehouseKeeper.displayImage(i, j - 1);
+                                numberOfMoves++;
+                                movesLabel.setText("Number of Moves: " + numberOfMoves);
+                            }
+
+                        }
+                    }
+                }
+
+            });
+
+            downButton.setOnAction(value -> {
+
+                for (int i = 0; i < map.length - lineLengthModifier; i++) {
+                    for (int j = 0; j < map[i].length; j++) {
+                        if (map[i][j] == warehouseKeeper) {
+                            if (!(map[i][j + 1] instanceof Wall)) {
+                                if ((map[i][j + 1] instanceof Crate)) {
+                                    if (!(map[i][j + 2] instanceof Crate || map[i][j + 2] instanceof Wall)) {
+                                        Crate newCrate = new Crate();
+                                        map[i][j + 2] = newCrate;
+                                        newCrate.displayImage(i, j + 2);
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                if (diamonds[i][j] != null) {
+                                    Diamond newDiamond = new Diamond();
+                                    map[i][j] = newDiamond;
+                                    newDiamond.displayImage(i, j);
+
+                                } else {
+
+                                    Tile newFloor = new Tile();
+                                    map[i][j] = newFloor;
+                                    newFloor.displayImage(i, j);
+
+                                }
+                                map[i][j + 1] = warehouseKeeper;
+                                warehouseKeeper.displayImage(i, j + 1);
+                                j = j + 3;
+                                numberOfMoves++;
+                                movesLabel.setText("Number of Moves: " + numberOfMoves);
+                            }
+                        }
+                    }
+                }
+            });
+
+            leftButton.setOnAction(value -> {
+
+                for (int i = 0; i < map.length - lineLengthModifier; i++) {
+                    for (int j = 0; j < map[i].length; j++) {
+                        if (map[i][j] == warehouseKeeper) {
+                            if (!(map[i - 1][j] instanceof Wall)) {
+                                if ((map[i - 1][j] instanceof Crate)) {
+                                    if (!(map[i - 2][j] instanceof Crate || map[i - 2][j] instanceof Wall)) {
+                                        Crate newCrate = new Crate();
+                                        map[i - 2][j] = newCrate;
+                                        newCrate.displayImage(i - 2, j);
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                if (diamonds[i][j] != null) {
+                                    Diamond newDiamond = new Diamond();
+                                    map[i][j] = newDiamond;
+                                    newDiamond.displayImage(i, j);
+                                } else {
+
+                                    Tile newFloor = new Tile();
+                                    map[i][j] = newFloor;
+                                    newFloor.displayImage(i, j);
+                                }
+                                map[i - 1][j] = warehouseKeeper;
+                                warehouseKeeper.displayImage(i - 1, j);
+                                numberOfMoves++;
+                                movesLabel.setText("Number of Moves: " + numberOfMoves);
+                            }
+                        }
+                    }
+                }
+            });
+
+            rightButton.setOnAction(value -> {
+
+                for (int i = 0; i < map.length - lineLengthModifier; i++) {
+                    for (int j = 0; j < map[i].length; j++) {
+                        if (map[i][j] == warehouseKeeper) {
+                            if (!(map[i + 1][j] instanceof Wall)) {
+                                if ((map[i + 1][j] instanceof Crate)) {
+                                    if (!(map[i + 2][j] instanceof Crate || map[i + 2][j] instanceof Wall)) {
+                                        Crate newCrate = new Crate();
+                                        map[i + 2][j] = newCrate;
+                                        newCrate.displayImage(i + 2, j);
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                if (diamonds[i][j] != null) {
+                                    Diamond newDiamond = new Diamond();
+                                    map[i][j] = newDiamond;
+                                    newDiamond.displayImage(i, j);
+
+                                } else {
+
+                                    Tile newFloor = new Tile();
+                                    map[i][j] = newFloor;
+                                    newFloor.displayImage(i, j);
+
+                                }
+                                map[i + 1][j] = warehouseKeeper;
+                                warehouseKeeper.displayImage(i + 1, j);
+                                i = i + 3;
+                                numberOfMoves++;
+                                movesLabel.setText("Number of Moves: " + numberOfMoves);
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            resetButton.setOnAction(value -> {
+
+            });
+
+            nextLevelButton.setOnAction(value -> {
+
+            });
 
             map[0][0].displayGame();
 
