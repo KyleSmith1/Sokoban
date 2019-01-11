@@ -14,6 +14,7 @@ public class Diamond extends MapElement {
         this.elementType = "Diamond";
     }
 
+    //Return the ImageView for the diamond image
     public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Diamond.png");
@@ -23,10 +24,12 @@ public class Diamond extends MapElement {
 
     }
 
+    //If the diamond has a crate on top of it, set "hasCrate" is changed to true and vice versa. 
     public void setHasCrate(boolean crateStateChange) {
         hasCrate = crateStateChange;
     }
 
+    //Detemine whether or not the diamond currently has a crate on it
     public boolean getHasCrate() {
         return hasCrate;
     }

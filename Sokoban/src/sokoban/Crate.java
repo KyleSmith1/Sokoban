@@ -12,6 +12,7 @@ public class Crate extends MoveableMapElement {
         this.elementType = "Crate";
     }
 
+    //Return the ImageView for the crate image
     public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Crate.png");

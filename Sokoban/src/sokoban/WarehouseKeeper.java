@@ -12,6 +12,7 @@ public class WarehouseKeeper extends MoveableMapElement {
         this.elementType = "WarehouseKeeper";
     }
 
+    //Return the ImageView for the keeper image
     public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/WarehouseKeeper.png");

@@ -12,10 +12,12 @@ public class SokobanGame {
     }
 
     public void setLevel(int levelNumber) {
+        //Sets the current level to the level passed into the parameter
         CurrentLevel = new Level(levelNumber);
     }
 
     public Level getMap(int LevelNumber) {
+        //Gets the current level
         return CurrentLevel;
     }
 

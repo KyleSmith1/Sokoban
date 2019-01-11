@@ -23,16 +23,21 @@ public class Level {
     private Diamond diamonds[][] = new Diamond[25][15];
 
     public Level() {
-
+        System.out.println("Error. Level not selected.");
     }
 
     public Level(int levelNumber) {
 
+        //Finds the file for the chosen level number
         File inputFile = new File("resources/SokobanMaps/level" + levelNumber + ".txt");
 
         FileReader reader = null;
         BufferedReader inputBuffer = null;
 
+        //Sets the title for the window
+        MapElement.window.setTitle("Sokoban Level " + levelNumber);
+
+        //Creates a second reader and buffered reader to get the length of a line for that level without impacting the original reader/buffered reader which displays the map
         FileReader reader2 = null;
         BufferedReader inputBuffer2 = null;
 
@@ -50,13 +55,11 @@ public class Level {
         Button leftButton = new Button("\u2190");
         Button rightButton = new Button("\u2192");
 
-        Label emptyLabel = new Label("               ");
-
+        //Adds the controller buttons to the gridpane
         gridPane.add(upButton, 2, 1);
         gridPane.add(downButton, 2, 2);
         gridPane.add(leftButton, 1, 2);
         gridPane.add(rightButton, 3, 2);
-        gridPane.add(emptyLabel, 4, 2);
 
         try {
 
@@ -68,14 +71,16 @@ public class Level {
             String inputLine = inputBuffer2.readLine();
             int lineLength = inputLine.length();
 
+            //Map.length is always 25 (Size of the map[i] array). 
             int lineLengthModifier = (map.length - lineLength) - 2;
-
+            
+            //Reads the level file one character at a time
             int input = inputBuffer.read();
 
+            //Until there are no more characters to read
             while (input != -1) {
-                //Create system where i = x and j = y and times that by 32 to get x and y co-ords for the display
-
-                //Get variable from other classes class.variable?
+              
+                //lineLengthModifier is subtracted from map.length so that the map displays correctly.
                 for (int i = 0; i < map.length - lineLengthModifier; i++) {
                     for (int j = 0; j < map[i].length; j++) {
 
@@ -142,20 +147,27 @@ public class Level {
                         }
 
                     }
-
+                    //Read the next character and repeat the whole process
                     input = inputBuffer.read();
                 }
 
             }
 
+            //Actions triggered by the "up" button
             upButton.setOnAction(value -> {
-
+                
+                //Iterate through the entire map again
                 for (int i = 0; i < map.length - lineLengthModifier; i++) {
                     for (int j = 0; j < map[i].length; j++) {
+                        //Find the location of the warehouse keeper
                         if (map[i][j] == warehouseKeeper) {
+                            //If the element one space up from the keeper is not a wall...
                             if (!(map[i][j - 1] instanceof Wall)) {
+                                //If the element one space up from the keeper is a crate...
                                 if ((map[i][j - 1] instanceof Crate)) {
+                                    //And if the element two spaces up from the keeper (and one space up from the crate) is not another crate or a wall...
                                     if (!(map[i][j - 2] instanceof Crate || map[i][j - 2] instanceof Wall)) {
+                                        //Replace the space one up from the crate with a crate
                                         Crate newCrate = new Crate();
                                         map[i][j - 2] = newCrate;
                                         newCrate.displayImage(i, j - 2);
@@ -163,18 +175,23 @@ public class Level {
                                         break;
                                     }
                                 }
+                                //If the 2d array "diamonds" is not empty at [i][j], that means there is a diamond at that space on the map. The diamonds have their own array so that their position never changes even when a crate or a keeper is on top of it.
                                 if (diamonds[i][j] != null) {
+                                    //As the keeper moves a space up, replace the tile the keeper was on with a diamond once again.
                                     Diamond newDiamond = new Diamond();
                                     map[i][j] = newDiamond;
                                     newDiamond.displayImage(i, j);
                                 } else {
+                                    //If the tile wasn't originally a diamond, replace it with a regular floor.
                                     Tile newFloor = new Tile();
                                     map[i][j] = newFloor;
                                     newFloor.displayImage(i, j);
                                 }
+                                //Set the keeper to the space one up from the original position
                                 map[i][j - 1] = warehouseKeeper;
                                 warehouseKeeper.displayImage(i, j - 1);
                                 numberOfMoves++;
+                                //Refresh the number of moves label
                                 movesLabel.setText("Number of Moves: " + numberOfMoves);
                             }
 
@@ -186,6 +203,7 @@ public class Level {
 
             downButton.setOnAction(value -> {
 
+                //Same as up button but for down
                 for (int i = 0; i < map.length - lineLengthModifier; i++) {
                     for (int j = 0; j < map[i].length; j++) {
                         if (map[i][j] == warehouseKeeper) {
@@ -213,6 +231,7 @@ public class Level {
                                 }
                                 map[i][j + 1] = warehouseKeeper;
                                 warehouseKeeper.displayImage(i, j + 1);
+                                //The 'j' variable is skipped forward 3 spaces otherwise certain actions repeat. For example, the keeper at [i][j] moves to [i][j+1] and then the for loop continues to the next in the array and the actions repeats itself until the keeper cannot move anymore
                                 j = j + 3;
                                 numberOfMoves++;
                                 movesLabel.setText("Number of Moves: " + numberOfMoves);
@@ -222,6 +241,7 @@ public class Level {
                 }
             });
 
+            //Same as up button except moves one space to the left
             leftButton.setOnAction(value -> {
 
                 for (int i = 0; i < map.length - lineLengthModifier; i++) {
@@ -257,6 +277,7 @@ public class Level {
                 }
             });
 
+            //Same as up button but moves on space to the right
             rightButton.setOnAction(value -> {
 
                 for (int i = 0; i < map.length - lineLengthModifier; i++) {
@@ -286,6 +307,7 @@ public class Level {
                                 }
                                 map[i + 1][j] = warehouseKeeper;
                                 warehouseKeeper.displayImage(i + 1, j);
+                                //i is skipped forward for the same reason that j is skipped forward when moving down
                                 i = i + 3;
                                 numberOfMoves++;
                                 movesLabel.setText("Number of Moves: " + numberOfMoves);
@@ -296,8 +318,10 @@ public class Level {
 
             });
 
+            //Displays the window in which the game is played.
             map[0][0].displayGame();
 
+            //Error handling for the file reader
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         } catch (IOException ioe) {
@@ -313,11 +337,13 @@ public class Level {
         }
 
     }
-
+    
+    //Gets the number of moves
     public int getNumberOfMoves() {
         return numberOfMoves;
     }
 
+    //Checks if the level is completed
     public boolean checkLevelCompleted() {
         return false;
     }

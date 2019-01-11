@@ -12,6 +12,7 @@ public class Wall extends MapElement {
         this.elementType = "Wall";
     }
 
+    //Return the ImageView for the wall image
     public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Wall.png");

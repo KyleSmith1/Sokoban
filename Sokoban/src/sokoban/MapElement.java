@@ -3,14 +3,12 @@ package sokoban;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+
 import javafx.stage.Stage;
 
 /**
@@ -19,39 +17,35 @@ import javafx.stage.Stage;
 abstract class MapElement {
 
     protected String elementType;
-    private int xCoord;
-    private int yCoord;
     public static AnchorPane anchorPane = new AnchorPane();
     public static GridPane gridPane = new GridPane();
     public static HBox topBorder = new HBox();
+    public static Stage window = new Stage();
 
     public MapElement() {
-
+        //Creates an instance of the coordinate class
         Coordinate objectCoords = new Coordinate();
-        xCoord = objectCoords.getX();
-        yCoord = objectCoords.getY();
 
     }
 
     public void displayImage(int x, int y) {
 
+        //Calls the createElement() class and sets the result to an ImageView "im"
         ImageView im = createElement();
 
+        //Sets the layout of the image where map[i][j] = map[x][y]. The x and y are multiplied by 32 as that is the width and height of the supplied images for each element.
         im.setLayoutX(x * 32);
         im.setLayoutY(y * 32);
-
-        xCoord = x * 32;
-        yCoord = y * 32;
 
         anchorPane.getChildren().add(im);
 
     }
 
+    //Abstract class createElement()
     abstract public ImageView createElement();
 
     public void displayGame() {
 
-        Stage window = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setMinSize(800, 500);
 
@@ -66,6 +60,7 @@ abstract class MapElement {
         topBorder.setMinSize(800, 100);
         gridPane.setMinSize(800, 100);
 
+        //Window cannot be resized
         window.setResizable(false);
 
         Scene appSceneGame = new Scene(borderPane);

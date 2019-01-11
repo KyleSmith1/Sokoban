@@ -12,6 +12,7 @@ public class Tile extends MapElement {
         this.elementType = "Floor";
     }
 
+    //Return the ImageView for the floor image
     public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Floor.png");
