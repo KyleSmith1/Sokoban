@@ -35,10 +35,10 @@ public class Level {
 
         FileReader reader2 = null;
         BufferedReader inputBuffer2 = null;
-        
-        Label levelLabel= new Label("Level " + levelNumber);
+
+        Label levelLabel = new Label("Level " + levelNumber);
         Label movesLabel = new Label("Number of Moves: " + numberOfMoves);
-        
+
         movesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
         levelLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
         movesLabel.setTranslateX(100);
@@ -49,8 +49,7 @@ public class Level {
         Button downButton = new Button("\u2193");
         Button leftButton = new Button("\u2190");
         Button rightButton = new Button("\u2192");
-        Button resetButton = new Button("Reset Level");
-        Button nextLevelButton = new Button("Next level");
+
         Label emptyLabel = new Label("               ");
 
         gridPane.add(upButton, 2, 1);
@@ -58,8 +57,6 @@ public class Level {
         gridPane.add(leftButton, 1, 2);
         gridPane.add(rightButton, 3, 2);
         gridPane.add(emptyLabel, 4, 2);
-        gridPane.add(resetButton, 5, 2);
-        gridPane.add(nextLevelButton, 5, 1);
 
         try {
 
@@ -296,14 +293,6 @@ public class Level {
                         }
                     }
                 }
-
-            });
-
-            resetButton.setOnAction(value -> {
-
-            });
-
-            nextLevelButton.setOnAction(value -> {
 
             });
 
