@@ -231,8 +231,8 @@ public class Level {
                                 }
                                 map[i][j + 1] = warehouseKeeper;
                                 warehouseKeeper.displayImage(i, j + 1);
-                                //The 'j' variable is skipped forward 3 spaces otherwise certain actions repeat. For example, the keeper at [i][j] moves to [i][j+1] and then the for loop continues to the next in the array and the actions repeats itself until the keeper cannot move anymore
-                                j = j + 3;
+                                //The 'j' variable is skipped forward 2 spaces otherwise certain actions repeat. For example, the keeper at [i][j] moves to [i][j+1] and then the for loop continues to the next in the array and the actions repeats itself until the keeper cannot move anymore
+                                j = j + 2;
                                 numberOfMoves++;
                                 movesLabel.setText("Number of Moves: " + numberOfMoves);
                             }
@@ -308,7 +308,7 @@ public class Level {
                                 map[i + 1][j] = warehouseKeeper;
                                 warehouseKeeper.displayImage(i + 1, j);
                                 //i is skipped forward for the same reason that j is skipped forward when moving down
-                                i = i + 3;
+                                i = i + 2;
                                 numberOfMoves++;
                                 movesLabel.setText("Number of Moves: " + numberOfMoves);
                             }
