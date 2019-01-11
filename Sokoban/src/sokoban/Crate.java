@@ -12,12 +12,12 @@ public class Crate extends MoveableMapElement {
         this.elementType = "Crate";
     }
 
-    public void createElement() {
+    public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Crate.png");
         ImageView im = new ImageView();
         im.setImage(elementImage);
-        this.elementImageView = im;
+        return im;
 
     }
 

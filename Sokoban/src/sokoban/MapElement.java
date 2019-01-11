@@ -26,36 +26,41 @@ import javafx.stage.Stage;
 abstract class MapElement {
 
     protected String elementType;
-    protected ImageView elementImageView;
-    private AnchorPane anchorPane = new AnchorPane();
+    private int xCoord;
+    private int yCoord;
+    public static AnchorPane anchorPane = new AnchorPane();
+    public static GridPane gridPane = new GridPane();
 
     public MapElement() {
 
         Coordinate objectCoords = new Coordinate();
-        int xCoord = objectCoords.getX();
-        int yCoord = objectCoords.getY();
-
-        //objectCoords.setX(xCoord + 32);
-        //objectCoords.setY(yCoord + 32);
-    }
-
-    public void displayImage() {
-        
-        anchorPane.getChildren().add(elementImageView);
+        xCoord = objectCoords.getX();
+        yCoord = objectCoords.getY();
 
     }
 
-    abstract public void createElement();
-    
-    public void displayGame(){
-        
+    public void displayImage(int x, int y) {
+
+        ImageView im = createElement();
+
+        im.setLayoutX(x * 32);
+        im.setLayoutY(y * 32);
+
+        xCoord = x * 32;
+        yCoord = y * 32;
+
+        anchorPane.getChildren().add(im);
+
+    }
+
+    abstract public ImageView createElement();
+
+    public void displayGame() {
+
         Stage window = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setMinSize(800, 500);
-
         HBox topBorder = new HBox();
-        //AnchorPane anchorPane = new AnchorPane();
-        GridPane gridPane = new GridPane();
 
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         topBorder.setPadding(new Insets(10, 10, 10, 10));
@@ -69,35 +74,17 @@ abstract class MapElement {
         borderPane.setCenter(anchorPane);
         borderPane.setBottom(gridPane);
 
+        topBorder.setMinSize(800, 100);
+        gridPane.setMinSize(800, 100);
+
+        window.setResizable(false);
+
         Scene appSceneGame = new Scene(borderPane);
         window.setScene(appSceneGame);
         window.show();
 
-        Button upButton = new Button("\u2191");
-        Button downButton = new Button("\u2193");
-        Button leftButton = new Button("\u2190");
-        Button rightButton = new Button("\u2192");
-
-        gridPane.add(upButton, 2, 1);
-        gridPane.add(downButton, 2, 2);
-        gridPane.add(leftButton, 1, 2);
-        gridPane.add(rightButton, 3, 2);
-
-        upButton.setOnAction(value -> {
-            //warehouseKeeper.moveElement();
-        });
-
-        downButton.setOnAction(value -> {
-            //warehouseKeeper.moveElement(1);
-        });
-
-        leftButton.setOnAction(value -> {
-            //warehouseKeeper.moveElement(1);
-        });
-
-        rightButton.setOnAction(value -> {
-            //warehouseKeeper.moveElement(1);
-        });
     }
+
+    
 
 }

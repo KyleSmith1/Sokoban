@@ -14,12 +14,12 @@ public class Diamond extends MapElement {
         this.elementType = "Diamond";
     }
 
-    public void createElement() {
+    public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Diamond.png");
         ImageView im = new ImageView();
         im.setImage(elementImage);
-        this.elementImageView = im;
+        return im;
 
     }
 

@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import static sokoban.MapElement.gridPane;
 
 /**
  * @author 14001835
@@ -44,16 +45,44 @@ public class Level {
         FileReader reader = null;
         BufferedReader inputBuffer = null;
 
+        FileReader reader2 = null;
+        BufferedReader inputBuffer2 = null;
+
+        Button upButton = new Button("\u2191");
+        Button downButton = new Button("\u2193");
+        Button leftButton = new Button("\u2190");
+        Button rightButton = new Button("\u2192");
+        Button resetButton = new Button("Reset Level");
+        Button nextLevelButton = new Button("Next level");
+        Label emptyLabel = new Label("               ");
+
+        gridPane.add(upButton, 2, 1);
+        gridPane.add(downButton, 2, 2);
+        gridPane.add(leftButton, 1, 2);
+        gridPane.add(rightButton, 3, 2);
+        gridPane.add(emptyLabel, 4, 2);
+        gridPane.add(resetButton, 5, 2);
+        gridPane.add(nextLevelButton, 5, 1);
+
         try {
 
             reader = new FileReader(inputFile);
             inputBuffer = new BufferedReader(reader);
+
+            reader2 = new FileReader(inputFile);
+            inputBuffer2 = new BufferedReader(reader2);
+            String inputLine = inputBuffer2.readLine();
+            int lineLength = inputLine.length();
+
+            int lineLengthModifier = (map.length - lineLength) - 2;
+
             int input = inputBuffer.read();
+
             while (input != -1) {
                 //Create system where i = x and j = y and times that by 32 to get x and y co-ords for the display
 
                 //Get variable from other classes class.variable?
-                for (int i = 0; i < map.length; i++) {
+                for (int i = 0; i < map.length - lineLengthModifier; i++) {
                     for (int j = 0; j < map[i].length; j++) {
 
                         char c = (char) input;
@@ -62,8 +91,8 @@ public class Level {
                             Tile newFloor = new Tile();
                             if (map[i][j] == null) {
                                 map[i][j] = newFloor;
-                                newFloor.createElement();
-                                newFloor.displayImage();
+
+                                newFloor.displayImage(i, j);
                                 break;
                             }
 
@@ -72,8 +101,8 @@ public class Level {
                             Wall newWall = new Wall();
                             if (map[i][j] == null) {
                                 map[i][j] = newWall;
-                                newWall.createElement();
-                                newWall.displayImage();
+
+                                newWall.displayImage(i, j);
                                 break;
                             }
 
@@ -89,8 +118,8 @@ public class Level {
 
                             if (map[i][j] == null) {
                                 map[i][j] = newCrate;
-                                newCrate.createElement();
-                                newCrate.displayImage();
+
+                                newCrate.displayImage(i, j);
                                 break;
                             }
 
@@ -99,8 +128,8 @@ public class Level {
                             Diamond newDiamond = new Diamond();
                             if (map[i][j] == null) {
                                 map[i][j] = newDiamond;
-                                newDiamond.createElement();
-                                newDiamond.displayImage();
+
+                                newDiamond.displayImage(i, j);
                                 break;
                             }
 
@@ -109,12 +138,44 @@ public class Level {
                             WarehouseKeeper newKeeper = new WarehouseKeeper();
                             if (map[i][j] == null) {
                                 map[i][j] = newKeeper;
-                                newKeeper.createElement();
+
                                 warehouseKeeper = newKeeper;
-                                warehouseKeeper.displayImage();
+                                warehouseKeeper.displayImage(i, j);
+
                                 break;
                             }
                         }
+
+                        upButton.setOnAction(value -> {
+                            System.out.println("UP!");
+                        });
+
+                        downButton.setOnAction(value -> {
+
+                            System.out.println("DOWN!");
+
+                        });
+
+                        leftButton.setOnAction(value -> {
+
+                            System.out.println("LEFT!");
+                        });
+
+                        rightButton.setOnAction(value -> {
+
+                            System.out.println("RIGHT!");
+
+                        });
+
+                        resetButton.setOnAction(value -> {
+                            
+
+                        });
+
+                        nextLevelButton.setOnAction(value -> {
+                            
+
+                        });
 
                     }
 
@@ -122,7 +183,7 @@ public class Level {
                 }
 
             }
-            
+
             map[0][0].displayGame();
 
         } catch (FileNotFoundException fnfe) {

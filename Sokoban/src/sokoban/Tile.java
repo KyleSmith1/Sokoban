@@ -12,13 +12,12 @@ public class Tile extends MapElement {
         this.elementType = "Floor";
     }
 
-    public void createElement() {
+    public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Floor.png");
         ImageView im = new ImageView();
         im.setImage(elementImage);
-        im.setLayoutX(70);
-        this.elementImageView = im;
+        return im;
 
     }
 

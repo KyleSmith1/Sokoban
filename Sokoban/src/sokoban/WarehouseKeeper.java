@@ -12,12 +12,12 @@ public class WarehouseKeeper extends MoveableMapElement {
         this.elementType = "WarehouseKeeper";
     }
 
-    public void createElement() {
+    public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/WarehouseKeeper.png");
         ImageView im = new ImageView();
         im.setImage(elementImage);
-        this.elementImageView = im;
+        return im;
     }
 
 }

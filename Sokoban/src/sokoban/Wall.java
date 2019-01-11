@@ -12,12 +12,12 @@ public class Wall extends MapElement {
         this.elementType = "Wall";
     }
 
-    public void createElement() {
+    public ImageView createElement() {
 
         Image elementImage = new Image("file:resources/SokobanImages/Wall.png");
         ImageView im = new ImageView();
         im.setImage(elementImage);
-        this.elementImageView = im;
+        return im;
     }
 
 }

@@ -9,7 +9,8 @@ public class Coordinate {
     private int yCoord;
 
     public Coordinate() {
-
+        this.xCoord = getX();
+        this.yCoord = getY();
     }
 
     //Returns the x co-ordinate
