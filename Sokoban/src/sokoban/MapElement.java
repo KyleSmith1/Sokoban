@@ -24,7 +24,7 @@ abstract class MapElement {
         ImageView im = new ImageView();
         im.setImage(elementImage);
 
-        //Sets the layout of the image where map[i][j] = map[x][y]. The x and y are multiplied by 32 as that is the width and height of the supplied images for each element.
+        //Sets the layout of the image
         im.setLayoutX(objectCoords.getX());
         im.setLayoutY(objectCoords.getY());
 

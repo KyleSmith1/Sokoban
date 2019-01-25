@@ -1,7 +1,5 @@
 package sokoban;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  * @author 14001835

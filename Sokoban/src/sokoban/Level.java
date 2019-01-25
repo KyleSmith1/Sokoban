@@ -5,11 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import static sokoban.SokobanGame.gridPane;
+
 
 /**
  * @author 14001835
@@ -45,18 +41,6 @@ public class Level {
 
         FileReader reader = null;
         BufferedReader inputBuffer = null;
-
-        //Sets the title for the window
-        SokobanGame.window.setTitle("Sokoban Level " + currentLevel);
-
-        Label levelLabel = new Label("Level " + currentLevel);
-        Label movesLabel = new Label("Number of Moves: " + numberOfMoves);
-
-        movesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-        levelLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
-        movesLabel.setTranslateX(100);
-        SokobanGame.topBorder.getChildren().add(levelLabel);
-        SokobanGame.topBorder.getChildren().add(movesLabel);
 
         try {
 
@@ -164,6 +148,7 @@ public class Level {
 
     }
 
+    //Commands for when a movement button is pressed
     public void controlKeeper(String direction) {
 
         Coordinate newCoord = new Coordinate();
@@ -185,7 +170,7 @@ public class Level {
                                     //Replace the space one up from the crate with a crate
                                     Crate newCrate = new Crate();
                                     newCrate = (Crate) map[i][j - 1];
-                                    map[i][j - 2] = map[i][j - 1];
+                                    map[i][j - 2] = newCrate;
                                     newCoord.setX(warehouseKeeper.objectCoords.getX());
                                     newCoord.setY((warehouseKeeper.objectCoords.getY()) - 64);
                                     newCrate.moveElement(newCoord);
@@ -218,8 +203,6 @@ public class Level {
                             warehouseKeeper.moveElement(newCoord);
                             numberOfMoves++;
 
-                            //Refresh the number of moves label
-                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
                         }
 
                     }
@@ -232,7 +215,7 @@ public class Level {
                                 if (!(map[i][j + 2] instanceof Crate || map[i][j + 2] instanceof Wall)) {
                                     Crate newCrate = new Crate();
                                     newCrate = (Crate) map[i][j + 1];
-                                    map[i][j + 2] = map[i][j + 1];
+                                    map[i][j + 2] = newCrate;
                                     newCoord.setX(warehouseKeeper.objectCoords.getX());
                                     newCoord.setY((warehouseKeeper.objectCoords.getY()) + 64);
                                     newCrate.moveElement(newCoord);
@@ -267,7 +250,6 @@ public class Level {
                             //The 'j' variable is skipped forward 2 spaces otherwise certain actions repeat. For example, the keeper at [i][j] moves to [i][j+1] and then the for loop continues to the next in the array and the actions repeats itself until the keeper cannot move anymore
                             j = j + 2;
 
-                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
                         }
                     }
 
@@ -279,7 +261,7 @@ public class Level {
                                 if (!(map[i - 2][j] instanceof Crate || map[i - 2][j] instanceof Wall)) {
                                     Crate newCrate = new Crate();
                                     newCrate = (Crate) map[i - 1][j];
-                                    map[i - 2][j] = map[i - 1][j];
+                                    map[i - 2][j] = newCrate;
                                     newCoord.setX(warehouseKeeper.objectCoords.getX() - 64);
                                     newCoord.setY(warehouseKeeper.objectCoords.getY());
                                     newCrate.moveElement(newCoord);
@@ -311,7 +293,6 @@ public class Level {
                             warehouseKeeper.moveElement(newCoord);
                             numberOfMoves++;
 
-                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
                         }
                     }
 
@@ -323,7 +304,7 @@ public class Level {
                                 if (!(map[i + 2][j] instanceof Crate || map[i + 2][j] instanceof Wall)) {
                                     Crate newCrate = new Crate();
                                     newCrate = (Crate) map[i + 1][j];
-                                    map[i + 2][j] = map[i + 1][j];
+                                    map[i + 2][j] = newCrate;
                                     newCoord.setX(warehouseKeeper.objectCoords.getX() + 64);
                                     newCoord.setY(warehouseKeeper.objectCoords.getY());
                                     newCrate.moveElement(newCoord);
@@ -358,7 +339,6 @@ public class Level {
                             //i is skipped forward for the same reason that j is skipped forward when moving down
                             i = i + 2;
 
-                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
                         }
                     }
 
@@ -375,6 +355,11 @@ public class Level {
     //Checks if the level is completed
     public boolean checkLevelCompleted() {
         return false;
+    }
+
+    //Returns the current level number
+    public int getLevelNumber() {
+        return currentLevel;
     }
 
 }
