@@ -9,105 +9,96 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static sokoban.MapElement.gridPane;
+import static sokoban.SokobanGame.gridPane;
 
 /**
  * @author 14001835
  */
 public class Level {
 
-    private MapElement map[][] = new MapElement[25][15];
+    private MapElement map[][] = new MapElement[25][25];
     private int numberOfMoves = 0;
     private WarehouseKeeper warehouseKeeper;
     private Crate crates[] = new Crate[10];
-    private Diamond diamonds[][] = new Diamond[25][15];
+    private Diamond diamonds[][] = new Diamond[25][25];
+    private int currentLevel;
+    private int lineLength;
 
+    //If no level is selected, game defaults to level 1
     public Level() {
-        System.out.println("Error. Level not selected.");
+        System.out.println("Error. Level not selected. Defaulting to Level 1");
+        currentLevel = 1;
+        displayLevel();
     }
 
+    //Sets the current level to the level selected and displays
     public Level(int levelNumber) {
+        currentLevel = levelNumber;
+        displayLevel();
+    }
+
+    //Reads the level file and displays to screen
+    public void displayLevel() {
 
         //Finds the file for the chosen level number
-        File inputFile = new File("resources/SokobanMaps/level" + levelNumber + ".txt");
+        File inputFile = new File("resources/SokobanMaps/level" + currentLevel + ".txt");
 
         FileReader reader = null;
         BufferedReader inputBuffer = null;
 
         //Sets the title for the window
-        MapElement.window.setTitle("Sokoban Level " + levelNumber);
+        SokobanGame.window.setTitle("Sokoban Level " + currentLevel);
 
-        //Creates a second reader and buffered reader to get the length of a line for that level without impacting the original reader/buffered reader which displays the map
-        FileReader reader2 = null;
-        BufferedReader inputBuffer2 = null;
-
-        Label levelLabel = new Label("Level " + levelNumber);
+        Label levelLabel = new Label("Level " + currentLevel);
         Label movesLabel = new Label("Number of Moves: " + numberOfMoves);
 
         movesLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
         levelLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
         movesLabel.setTranslateX(100);
-        MapElement.topBorder.getChildren().add(levelLabel);
-        MapElement.topBorder.getChildren().add(movesLabel);
-
-        Button upButton = new Button("\u2191");
-        Button downButton = new Button("\u2193");
-        Button leftButton = new Button("\u2190");
-        Button rightButton = new Button("\u2192");
-
-        //Adds the controller buttons to the gridpane
-        gridPane.add(upButton, 2, 1);
-        gridPane.add(downButton, 2, 2);
-        gridPane.add(leftButton, 1, 2);
-        gridPane.add(rightButton, 3, 2);
+        SokobanGame.topBorder.getChildren().add(levelLabel);
+        SokobanGame.topBorder.getChildren().add(movesLabel);
 
         try {
 
             reader = new FileReader(inputFile);
             inputBuffer = new BufferedReader(reader);
 
-            reader2 = new FileReader(inputFile);
-            inputBuffer2 = new BufferedReader(reader2);
-            String inputLine = inputBuffer2.readLine();
-            int lineLength = inputLine.length();
+            String input = inputBuffer.readLine();
+            lineLength = input.length();
 
-            //Map.length is always 25 (Size of the map[i] array). 
-            int lineLengthModifier = (map.length - lineLength) - 2;
-            
-            //Reads the level file one character at a time
-            int input = inputBuffer.read();
+            //Reads the level file one line at a time
+            //Until there are no more lines to read
+            while (input != null) {
 
-            //Until there are no more characters to read
-            while (input != -1) {
-              
-                //lineLengthModifier is subtracted from map.length so that the map displays correctly.
-                for (int i = 0; i < map.length - lineLengthModifier; i++) {
+                //Split line into individual characters
+                char[] lineChars = input.toCharArray();
+                for (int i = 0; i < lineLength; i++) {
                     for (int j = 0; j < map[i].length; j++) {
 
-                        char c = (char) input;
                         //Tile
-                        if (c == ' ') {
+                        if (lineChars[i] == ' ') {
                             Tile newFloor = new Tile();
                             if (map[i][j] == null) {
                                 map[i][j] = newFloor;
-
-                                newFloor.displayImage(i, j);
+                                newFloor.createElement(i, j);
+                                newFloor.displayImage();
                                 break;
                             }
 
                         } //Wall
-                        else if (c == 'X') {
+                        else if (lineChars[i] == 'X') {
                             Wall newWall = new Wall();
                             if (map[i][j] == null) {
                                 map[i][j] = newWall;
 
-                                newWall.displayImage(i, j);
+                                newWall.createElement(i, j);
+                                newWall.displayImage();
 
                                 break;
                             }
 
                         } //Crate
-                        else if (c == '*') {
+                        else if (lineChars[i] == '*') {
                             Crate newCrate = new Crate();
                             for (int k = 0; k < crates.length; k++) {
                                 if (crates[k] == null) {
@@ -118,208 +109,43 @@ public class Level {
 
                             if (map[i][j] == null) {
                                 map[i][j] = newCrate;
-
-                                newCrate.displayImage(i, j);
+                                newCrate.createElement(i, j);
+                                newCrate.displayImage();
                                 break;
                             }
 
                         } //Diamond
-                        else if (c == '.') {
+                        else if (lineChars[i] == '.') {
                             Diamond newDiamond = new Diamond();
                             if (map[i][j] == null) {
                                 map[i][j] = newDiamond;
                                 diamonds[i][j] = newDiamond;
-                                newDiamond.displayImage(i, j);
+                                newDiamond.createElement(i, j);
+                                newDiamond.displayImage();
                                 break;
                             }
 
                         } //Warehouse Keeper
-                        else if (c == '@') {
+                        else if (lineChars[i] == '@') {
                             WarehouseKeeper newKeeper = new WarehouseKeeper();
                             warehouseKeeper = newKeeper;
                             if (map[i][j] == null) {
                                 map[i][j] = warehouseKeeper;
-
-                                warehouseKeeper.displayImage(i, j);
+                                warehouseKeeper.createElement(i, j);
+                                warehouseKeeper.displayImage();
 
                                 break;
                             }
-                        }
 
+                        }
                     }
-                    //Read the next character and repeat the whole process
-                    input = inputBuffer.read();
+
                 }
+
+                //Read the next character and repeat the whole process
+                input = inputBuffer.readLine();
 
             }
-
-            //Actions triggered by the "up" button
-            upButton.setOnAction(value -> {
-                
-                //Iterate through the entire map again
-                for (int i = 0; i < map.length - lineLengthModifier; i++) {
-                    for (int j = 0; j < map[i].length; j++) {
-                        //Find the location of the warehouse keeper
-                        if (map[i][j] == warehouseKeeper) {
-                            //If the element one space up from the keeper is not a wall...
-                            if (!(map[i][j - 1] instanceof Wall)) {
-                                //If the element one space up from the keeper is a crate...
-                                if ((map[i][j - 1] instanceof Crate)) {
-                                    //And if the element two spaces up from the keeper (and one space up from the crate) is not another crate or a wall...
-                                    if (!(map[i][j - 2] instanceof Crate || map[i][j - 2] instanceof Wall)) {
-                                        //Replace the space one up from the crate with a crate
-                                        Crate newCrate = new Crate();
-                                        map[i][j - 2] = newCrate;
-                                        newCrate.displayImage(i, j - 2);
-                                    } else {
-                                        break;
-                                    }
-                                }
-                                //If the 2d array "diamonds" is not empty at [i][j], that means there is a diamond at that space on the map. The diamonds have their own array so that their position never changes even when a crate or a keeper is on top of it.
-                                if (diamonds[i][j] != null) {
-                                    //As the keeper moves a space up, replace the tile the keeper was on with a diamond once again.
-                                    Diamond newDiamond = new Diamond();
-                                    map[i][j] = newDiamond;
-                                    newDiamond.displayImage(i, j);
-                                } else {
-                                    //If the tile wasn't originally a diamond, replace it with a regular floor.
-                                    Tile newFloor = new Tile();
-                                    map[i][j] = newFloor;
-                                    newFloor.displayImage(i, j);
-                                }
-                                //Set the keeper to the space one up from the original position
-                                map[i][j - 1] = warehouseKeeper;
-                                warehouseKeeper.displayImage(i, j - 1);
-                                numberOfMoves++;
-                                //Refresh the number of moves label
-                                movesLabel.setText("Number of Moves: " + numberOfMoves);
-                            }
-
-                        }
-                    }
-                }
-
-            });
-
-            downButton.setOnAction(value -> {
-
-                //Same as up button but for down
-                for (int i = 0; i < map.length - lineLengthModifier; i++) {
-                    for (int j = 0; j < map[i].length; j++) {
-                        if (map[i][j] == warehouseKeeper) {
-                            if (!(map[i][j + 1] instanceof Wall)) {
-                                if ((map[i][j + 1] instanceof Crate)) {
-                                    if (!(map[i][j + 2] instanceof Crate || map[i][j + 2] instanceof Wall)) {
-                                        Crate newCrate = new Crate();
-                                        map[i][j + 2] = newCrate;
-                                        newCrate.displayImage(i, j + 2);
-                                    } else {
-                                        break;
-                                    }
-                                }
-                                if (diamonds[i][j] != null) {
-                                    Diamond newDiamond = new Diamond();
-                                    map[i][j] = newDiamond;
-                                    newDiamond.displayImage(i, j);
-
-                                } else {
-
-                                    Tile newFloor = new Tile();
-                                    map[i][j] = newFloor;
-                                    newFloor.displayImage(i, j);
-
-                                }
-                                map[i][j + 1] = warehouseKeeper;
-                                warehouseKeeper.displayImage(i, j + 1);
-                                //The 'j' variable is skipped forward 2 spaces otherwise certain actions repeat. For example, the keeper at [i][j] moves to [i][j+1] and then the for loop continues to the next in the array and the actions repeats itself until the keeper cannot move anymore
-                                j = j + 2;
-                                numberOfMoves++;
-                                movesLabel.setText("Number of Moves: " + numberOfMoves);
-                            }
-                        }
-                    }
-                }
-            });
-
-            //Same as up button except moves one space to the left
-            leftButton.setOnAction(value -> {
-
-                for (int i = 0; i < map.length - lineLengthModifier; i++) {
-                    for (int j = 0; j < map[i].length; j++) {
-                        if (map[i][j] == warehouseKeeper) {
-                            if (!(map[i - 1][j] instanceof Wall)) {
-                                if ((map[i - 1][j] instanceof Crate)) {
-                                    if (!(map[i - 2][j] instanceof Crate || map[i - 2][j] instanceof Wall)) {
-                                        Crate newCrate = new Crate();
-                                        map[i - 2][j] = newCrate;
-                                        newCrate.displayImage(i - 2, j);
-                                    } else {
-                                        break;
-                                    }
-                                }
-                                if (diamonds[i][j] != null) {
-                                    Diamond newDiamond = new Diamond();
-                                    map[i][j] = newDiamond;
-                                    newDiamond.displayImage(i, j);
-                                } else {
-
-                                    Tile newFloor = new Tile();
-                                    map[i][j] = newFloor;
-                                    newFloor.displayImage(i, j);
-                                }
-                                map[i - 1][j] = warehouseKeeper;
-                                warehouseKeeper.displayImage(i - 1, j);
-                                numberOfMoves++;
-                                movesLabel.setText("Number of Moves: " + numberOfMoves);
-                            }
-                        }
-                    }
-                }
-            });
-
-            //Same as up button but moves on space to the right
-            rightButton.setOnAction(value -> {
-
-                for (int i = 0; i < map.length - lineLengthModifier; i++) {
-                    for (int j = 0; j < map[i].length; j++) {
-                        if (map[i][j] == warehouseKeeper) {
-                            if (!(map[i + 1][j] instanceof Wall)) {
-                                if ((map[i + 1][j] instanceof Crate)) {
-                                    if (!(map[i + 2][j] instanceof Crate || map[i + 2][j] instanceof Wall)) {
-                                        Crate newCrate = new Crate();
-                                        map[i + 2][j] = newCrate;
-                                        newCrate.displayImage(i + 2, j);
-                                    } else {
-                                        break;
-                                    }
-                                }
-                                if (diamonds[i][j] != null) {
-                                    Diamond newDiamond = new Diamond();
-                                    map[i][j] = newDiamond;
-                                    newDiamond.displayImage(i, j);
-
-                                } else {
-
-                                    Tile newFloor = new Tile();
-                                    map[i][j] = newFloor;
-                                    newFloor.displayImage(i, j);
-
-                                }
-                                map[i + 1][j] = warehouseKeeper;
-                                warehouseKeeper.displayImage(i + 1, j);
-                                //i is skipped forward for the same reason that j is skipped forward when moving down
-                                i = i + 2;
-                                numberOfMoves++;
-                                movesLabel.setText("Number of Moves: " + numberOfMoves);
-                            }
-                        }
-                    }
-                }
-
-            });
-
-            //Displays the window in which the game is played.
-            map[0][0].displayGame();
 
             //Error handling for the file reader
         } catch (FileNotFoundException fnfe) {
@@ -337,7 +163,210 @@ public class Level {
         }
 
     }
-    
+
+    public void controlKeeper(String direction) {
+
+        Coordinate newCoord = new Coordinate();
+
+        //Iterate through the entire map again
+        for (int i = 0; i < lineLength; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                //Find the location of the warehouse keeper
+                if (map[i][j] == warehouseKeeper) {
+
+                    //Actions triggered by the "up" button
+                    if (direction.equals("Up")) {
+                        //If the element one space up from the keeper is not a wall...
+                        if (!(map[i][j - 1] instanceof Wall)) {
+                            //If the element one space up from the keeper is a crate...
+                            if ((map[i][j - 1] instanceof Crate)) {
+                                //And if the element two spaces up from the keeper (and one space up from the crate) is not another crate or a wall...
+                                if (!(map[i][j - 2] instanceof Crate || map[i][j - 2] instanceof Wall)) {
+                                    //Replace the space one up from the crate with a crate
+                                    Crate newCrate = new Crate();
+                                    newCrate = (Crate) map[i][j - 1];
+                                    map[i][j - 2] = map[i][j - 1];
+                                    newCoord.setX(warehouseKeeper.objectCoords.getX());
+                                    newCoord.setY((warehouseKeeper.objectCoords.getY()) - 64);
+                                    newCrate.moveElement(newCoord);
+
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            //Set the keeper to the space one up from the original position
+                            map[i][j - 1] = warehouseKeeper;
+                            newCoord.setX(warehouseKeeper.objectCoords.getX());
+                            newCoord.setY((warehouseKeeper.objectCoords.getY()) - 32);
+
+                            //If the 2d array "diamonds" is not empty at [i][j], that means there is a diamond at that space on the map. The diamonds have their own array so that their position never changes even when a crate or a keeper is on top of it.
+                            if (diamonds[i][j] != null) {
+                                //As the keeper moves a space up, replace the tile the keeper was on with a diamond once again.
+                                Diamond newDiamond = new Diamond();
+                                map[i][j] = newDiamond;
+                                newDiamond.createElement(i, j);
+                                newDiamond.displayImage();
+                            } else {
+                                //If the tile wasn't originally a diamond, replace it with a regular floor.
+                                Tile newFloor = new Tile();
+                                map[i][j] = newFloor;
+                                newFloor.createElement(i, j);
+                                newFloor.displayImage();
+                            }
+
+                            warehouseKeeper.moveElement(newCoord);
+                            numberOfMoves++;
+
+                            //Refresh the number of moves label
+                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
+                        }
+
+                    }
+
+                    //Same as up button but for down
+                    if (direction.equals("Down")) {
+
+                        if (!(map[i][j + 1] instanceof Wall)) {
+                            if ((map[i][j + 1] instanceof Crate)) {
+                                if (!(map[i][j + 2] instanceof Crate || map[i][j + 2] instanceof Wall)) {
+                                    Crate newCrate = new Crate();
+                                    newCrate = (Crate) map[i][j + 1];
+                                    map[i][j + 2] = map[i][j + 1];
+                                    newCoord.setX(warehouseKeeper.objectCoords.getX());
+                                    newCoord.setY((warehouseKeeper.objectCoords.getY()) + 64);
+                                    newCrate.moveElement(newCoord);
+
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            map[i][j + 1] = warehouseKeeper;
+                            newCoord.setX(warehouseKeeper.objectCoords.getX());
+                            newCoord.setY((warehouseKeeper.objectCoords.getY()) + 32);
+
+                            //If the 2d array "diamonds" is not empty at [i][j], that means there is a diamond at that space on the map. The diamonds have their own array so that their position never changes even when a crate or a keeper is on top of it.
+                            if (diamonds[i][j] != null) {
+                                //As the keeper moves a space up, replace the tile the keeper was on with a diamond once again.
+                                Diamond newDiamond = new Diamond();
+                                map[i][j] = newDiamond;
+                                newDiamond.createElement(i, j);
+                                newDiamond.displayImage();
+                            } else {
+                                //If the tile wasn't originally a diamond, replace it with a regular floor.
+                                Tile newFloor = new Tile();
+                                map[i][j] = newFloor;
+                                newFloor.createElement(i, j);
+                                newFloor.displayImage();
+                            }
+
+                            warehouseKeeper.moveElement(newCoord);
+                            numberOfMoves++;
+
+                            //The 'j' variable is skipped forward 2 spaces otherwise certain actions repeat. For example, the keeper at [i][j] moves to [i][j+1] and then the for loop continues to the next in the array and the actions repeats itself until the keeper cannot move anymore
+                            j = j + 2;
+
+                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
+                        }
+                    }
+
+                    //Same as up button except moves one space to the left
+                    if (direction.equals("Left")) {
+
+                        if (!(map[i - 1][j] instanceof Wall)) {
+                            if ((map[i - 1][j] instanceof Crate)) {
+                                if (!(map[i - 2][j] instanceof Crate || map[i - 2][j] instanceof Wall)) {
+                                    Crate newCrate = new Crate();
+                                    newCrate = (Crate) map[i - 1][j];
+                                    map[i - 2][j] = map[i - 1][j];
+                                    newCoord.setX(warehouseKeeper.objectCoords.getX() - 64);
+                                    newCoord.setY(warehouseKeeper.objectCoords.getY());
+                                    newCrate.moveElement(newCoord);
+
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            map[i - 1][j] = warehouseKeeper;
+                            newCoord.setX(warehouseKeeper.objectCoords.getX() - 32);
+                            newCoord.setY(warehouseKeeper.objectCoords.getY());
+
+                            //If the 2d array "diamonds" is not empty at [i][j], that means there is a diamond at that space on the map. The diamonds have their own array so that their position never changes even when a crate or a keeper is on top of it.
+                            if (diamonds[i][j] != null) {
+                                //As the keeper moves a space up, replace the tile the keeper was on with a diamond once again.
+                                Diamond newDiamond = new Diamond();
+                                map[i][j] = newDiamond;
+                                newDiamond.createElement(i, j);
+                                newDiamond.displayImage();
+                            } else {
+                                //If the tile wasn't originally a diamond, replace it with a regular floor.
+                                Tile newFloor = new Tile();
+                                map[i][j] = newFloor;
+                                newFloor.createElement(i, j);
+                                newFloor.displayImage();
+                            }
+
+                            warehouseKeeper.moveElement(newCoord);
+                            numberOfMoves++;
+
+                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
+                        }
+                    }
+
+                    //Same as up button but moves on space to the right
+                    if (direction.equals("Right")) {
+
+                        if (!(map[i + 1][j] instanceof Wall)) {
+                            if ((map[i + 1][j] instanceof Crate)) {
+                                if (!(map[i + 2][j] instanceof Crate || map[i + 2][j] instanceof Wall)) {
+                                    Crate newCrate = new Crate();
+                                    newCrate = (Crate) map[i + 1][j];
+                                    map[i + 2][j] = map[i + 1][j];
+                                    newCoord.setX(warehouseKeeper.objectCoords.getX() + 64);
+                                    newCoord.setY(warehouseKeeper.objectCoords.getY());
+                                    newCrate.moveElement(newCoord);
+
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            map[i + 1][j] = warehouseKeeper;
+                            newCoord.setX(warehouseKeeper.objectCoords.getX() + 32);
+                            newCoord.setY(warehouseKeeper.objectCoords.getY());
+
+                            //If the 2d array "diamonds" is not empty at [i][j], that means there is a diamond at that space on the map. The diamonds have their own array so that their position never changes even when a crate or a keeper is on top of it.
+                            if (diamonds[i][j] != null) {
+                                //As the keeper moves a space up, replace the tile the keeper was on with a diamond once again.
+                                Diamond newDiamond = new Diamond();
+                                map[i][j] = newDiamond;
+                                newDiamond.createElement(i, j);
+                                newDiamond.displayImage();
+                            } else {
+                                //If the tile wasn't originally a diamond, replace it with a regular floor.
+                                Tile newFloor = new Tile();
+                                map[i][j] = newFloor;
+                                newFloor.createElement(i, j);
+                                newFloor.displayImage();
+                            }
+
+                            warehouseKeeper.moveElement(newCoord);
+                            numberOfMoves++;
+
+                            //i is skipped forward for the same reason that j is skipped forward when moving down
+                            i = i + 2;
+
+                            //movesLabel.setText("Number of Moves: " + numberOfMoves);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     //Gets the number of moves
     public int getNumberOfMoves() {
         return numberOfMoves;

@@ -10,15 +10,14 @@ public class Tile extends MapElement {
 
     public Tile() {
         this.elementType = "Floor";
+        this.objectCoords = new Coordinate();
     }
 
-    //Return the ImageView for the floor image
-    public ImageView createElement() {
+    //Gives the element an x and y co-ordinate
+    public void createElement(int x, int y) {
 
-        Image elementImage = new Image("file:resources/SokobanImages/Floor.png");
-        ImageView im = new ImageView();
-        im.setImage(elementImage);
-        return im;
+        objectCoords.setX(x*32);
+        objectCoords.setY(y*32);
 
     }
 

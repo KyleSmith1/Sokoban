@@ -10,15 +10,15 @@ public class Wall extends MapElement {
 
     public Wall() {
         this.elementType = "Wall";
+        this.objectCoords = new Coordinate();
     }
 
-    //Return the ImageView for the wall image
-    public ImageView createElement() {
+    //Gives the element an x and y co-ordinate
+    public void createElement(int x, int y) {
 
-        Image elementImage = new Image("file:resources/SokobanImages/Wall.png");
-        ImageView im = new ImageView();
-        im.setImage(elementImage);
-        return im;
+        objectCoords.setX(x*32);
+        objectCoords.setY(y*32);
+        
     }
 
 }

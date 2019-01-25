@@ -10,15 +10,14 @@ public class Crate extends MoveableMapElement {
 
     public Crate() {
         this.elementType = "Crate";
+        this.objectCoords = new Coordinate();
     }
 
-    //Return the ImageView for the crate image
-    public ImageView createElement() {
+    //Gives the element an x and y co-ordinate
+    public void createElement(int x, int y) {
 
-        Image elementImage = new Image("file:resources/SokobanImages/Crate.png");
-        ImageView im = new ImageView();
-        im.setImage(elementImage);
-        return im;
+        objectCoords.setX(x*32);
+        objectCoords.setY(y*32);
 
     }
 

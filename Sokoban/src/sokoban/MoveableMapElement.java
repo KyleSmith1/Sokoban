@@ -7,9 +7,16 @@ abstract class MoveableMapElement extends MapElement {
 
     private Coordinate position;
 
-    //moveable map elements also inherit the moveElement class
+    //Moveable map elements also inherit the moveElement class
+    //Changes the element's co-ords
     public void moveElement(Coordinate newCoord) {
+        
         position = newCoord;
+        
+        this.objectCoords.setX(position.getX());
+        this.objectCoords.setY(position.getY());
+        this.displayImage();
+        
     }
 
 }

@@ -19,7 +19,9 @@ public class SokobanDriver extends Application {
     }
 
     @Override
+    //Creates the main menu for selecting a level
     public void start(Stage stage) throws Exception {
+
         VBox componentLayout = new VBox(10);
         componentLayout.setAlignment(Pos.CENTER);
 
@@ -32,7 +34,6 @@ public class SokobanDriver extends Application {
         Button selectButton = new Button("Select Level");
         componentLayout.getChildren().add(selectButton);
 
-        
         //Button to close program
         Button exitButton = new Button("Exit");
         componentLayout.getChildren().add(exitButton);
@@ -75,31 +76,31 @@ public class SokobanDriver extends Application {
             game.setLevel(1);
             stage.close();
         });
-        
+
         //Sets the game's level to level 2
         level2Button.setOnAction(value -> {
             game.setLevel(2);
             stage.close();
         });
-        
+
         //Sets the game's level to level 3
         level3Button.setOnAction(value -> {
             game.setLevel(3);
             stage.close();
         });
-        
+
         //Sets the game's level to level 4
         level4Button.setOnAction(value -> {
             game.setLevel(4);
             stage.close();
         });
-        
+
         //Sets the game's level to level 5
         level5Button.setOnAction(value -> {
             game.setLevel(5);
             stage.close();
         });
-        
+
         //Returns from the select level menu to the main menu
         backButton.setOnAction(value -> {
             componentLayout.getChildren().remove(level1Button);
@@ -108,7 +109,7 @@ public class SokobanDriver extends Application {
             componentLayout.getChildren().remove(level4Button);
             componentLayout.getChildren().remove(level5Button);
             componentLayout.getChildren().remove(backButton);
-            
+
             componentLayout.getChildren().add(selectButton);
             componentLayout.getChildren().add(exitButton);
         });
