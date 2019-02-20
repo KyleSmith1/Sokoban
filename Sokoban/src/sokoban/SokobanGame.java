@@ -97,28 +97,28 @@ public class SokobanGame {
         //What happens when each of the directional buttons are clicked
         upButton.setOnAction(value -> {
 
-            CurrentLevel.controlKeeper("Up");
+            CurrentLevel.checkAvailableMove("Up");
             movesLabel.setText("Number of Moves: " + CurrentLevel.getNumberOfMoves());
 
         });
 
         downButton.setOnAction(value -> {
 
-            CurrentLevel.controlKeeper("Down");
+            CurrentLevel.checkAvailableMove("Down");
             movesLabel.setText("Number of Moves: " + CurrentLevel.getNumberOfMoves());
 
         });
 
         leftButton.setOnAction(value -> {
 
-            CurrentLevel.controlKeeper("Left");
+            CurrentLevel.checkAvailableMove("Left");
             movesLabel.setText("Number of Moves: " + CurrentLevel.getNumberOfMoves());
 
         });
 
         rightButton.setOnAction(value -> {
 
-            CurrentLevel.controlKeeper("Right");
+            CurrentLevel.checkAvailableMove("Right");
             movesLabel.setText("Number of Moves: " + CurrentLevel.getNumberOfMoves());
 
         });

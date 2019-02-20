@@ -6,16 +6,16 @@ package sokoban;
  */
 public class Diamond extends MapElement {
 
-    private Boolean hasCrate;
+    private Boolean hasCrate = false;
 
     public Diamond() {
-        this.elementType = "Diamond";
+        
         this.objectCoords = new Coordinate();
     }
 
     //Gives the element an x and y co-ordinate
     public void createElement(int x, int y) {
-
+        this.elementType = "Diamond";
         objectCoords.setX(x * 32);
         objectCoords.setY(y * 32);
 

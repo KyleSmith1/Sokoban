@@ -7,13 +7,13 @@ package sokoban;
 public class Wall extends MapElement {
 
     public Wall() {
-        this.elementType = "Wall";
+        
         this.objectCoords = new Coordinate();
     }
 
     //Gives the element an x and y co-ordinate
     public void createElement(int x, int y) {
-
+        this.elementType = "Wall";
         objectCoords.setX(x*32);
         objectCoords.setY(y*32);
         

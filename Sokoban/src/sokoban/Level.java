@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 /**
  * @author 14001835
  */
@@ -148,8 +147,8 @@ public class Level {
 
     }
 
-    //Commands for when a movement button is pressed
-    public void controlKeeper(String direction) {
+    //Checks whether the keeper can move in the chosen directio and, if they can, runs the "moveElement" function on the keeper (and a crate too, if a crate is moved)
+    public void checkAvailableMove(String direction) {
 
         Coordinate newCoord = new Coordinate();
 
@@ -161,12 +160,14 @@ public class Level {
 
                     //Actions triggered by the "up" button
                     if (direction.equals("Up")) {
+
                         //If the element one space up from the keeper is not a wall...
                         if (!(map[i][j - 1] instanceof Wall)) {
                             //If the element one space up from the keeper is a crate...
                             if ((map[i][j - 1] instanceof Crate)) {
                                 //And if the element two spaces up from the keeper (and one space up from the crate) is not another crate or a wall...
                                 if (!(map[i][j - 2] instanceof Crate || map[i][j - 2] instanceof Wall)) {
+
                                     //Replace the space one up from the crate with a crate
                                     Crate newCrate = new Crate();
                                     newCrate = (Crate) map[i][j - 1];
@@ -174,6 +175,13 @@ public class Level {
                                     newCoord.setX(warehouseKeeper.objectCoords.getX());
                                     newCoord.setY((warehouseKeeper.objectCoords.getY()) - 64);
                                     newCrate.moveElement(newCoord);
+
+                                    if (diamonds[i][j - 2] != null && map[i][j - 2] instanceof Crate) {
+                                        diamonds[i][j - 2].setHasCrate(true);
+                                    }
+                                    if (diamonds[i][j - 1] != null) {
+                                        diamonds[i][j - 1].setHasCrate(false);
+                                    }
 
                                 } else {
                                     break;
@@ -213,12 +221,21 @@ public class Level {
                         if (!(map[i][j + 1] instanceof Wall)) {
                             if ((map[i][j + 1] instanceof Crate)) {
                                 if (!(map[i][j + 2] instanceof Crate || map[i][j + 2] instanceof Wall)) {
+
                                     Crate newCrate = new Crate();
                                     newCrate = (Crate) map[i][j + 1];
                                     map[i][j + 2] = newCrate;
                                     newCoord.setX(warehouseKeeper.objectCoords.getX());
                                     newCoord.setY((warehouseKeeper.objectCoords.getY()) + 64);
                                     newCrate.moveElement(newCoord);
+
+                                    if (diamonds[i][j + 2] != null && map[i][j + 2] instanceof Crate) {
+                                        diamonds[i][j + 2].setHasCrate(true);
+                                    }
+
+                                    if (diamonds[i][j + 1] != null) {
+                                        diamonds[i][j + 1].setHasCrate(false);
+                                    }
 
                                 } else {
                                     break;
@@ -266,6 +283,14 @@ public class Level {
                                     newCoord.setY(warehouseKeeper.objectCoords.getY());
                                     newCrate.moveElement(newCoord);
 
+                                    if (diamonds[i - 2][j] != null && map[i - 2][j] instanceof Crate) {
+                                        diamonds[i - 2][j].setHasCrate(true);
+                                    }
+
+                                    if (diamonds[i - 1][j] != null) {
+                                        diamonds[i - 1][j].setHasCrate(false);
+                                    }
+
                                 } else {
                                     break;
                                 }
@@ -309,6 +334,14 @@ public class Level {
                                     newCoord.setY(warehouseKeeper.objectCoords.getY());
                                     newCrate.moveElement(newCoord);
 
+                                    if (diamonds[i + 2][j] != null && map[i + 2][j] instanceof Crate) {
+                                        diamonds[i + 2][j].setHasCrate(true);
+                                    }
+
+                                    if (diamonds[i + 1][j] != null) {
+                                        diamonds[i + 1][j].setHasCrate(false);
+                                    }
+
                                 } else {
                                     break;
                                 }
@@ -345,6 +378,11 @@ public class Level {
                 }
             }
         }
+
+        if (checkLevelCompleted() == true) {
+            System.out.println("You win!");
+        }
+
     }
 
     //Gets the number of moves
@@ -354,7 +392,32 @@ public class Level {
 
     //Checks if the level is completed
     public boolean checkLevelCompleted() {
-        return false;
+
+        int noOfDiamonds = 0;
+        int noOfCratesOnDiamonds = 0;
+
+        for (int i = 0; i < lineLength; i++) {
+            for (int j = 0; j < diamonds[i].length; j++) {
+
+                if (diamonds[i][j] != null) {
+
+                    noOfDiamonds++;
+
+                    if (diamonds[i][j].getHasCrate() == true) {
+                        noOfCratesOnDiamonds++;
+                    }
+
+                }
+
+            }
+        }
+
+        if (noOfDiamonds == noOfCratesOnDiamonds) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     //Returns the current level number
